@@ -54,20 +54,7 @@
 
 公式如下：
 
-$$
-t_a = \frac{v_{max}}{a_{max}}, \quad
-S_{acc} = \frac{1}{2}a_{max}t_a^2, \quad
-S_{flat} = S_{total} - 2S_{acc}
-$$
-
-$$
-S(t)=
-\begin{cases}
-\frac{1}{2}a_{max}t^2, & 0<t<t_a \\\\
-S_{acc}+v_{max}(t-t_a), & t_a<t<t_a+t_m \\\\
-S_{total}-\frac{1}{2}a_{max}(t_f-t)^2, & t_a+t_m<t<t_f
-\end{cases}
-$$
+<img src="https://xlh-obsidian-1361995125.cos.ap-guangzhou.myqcloud.com/sandow/pic/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-10-22%20170539.png"/>
 
 ---
 

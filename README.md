@@ -26,3 +26,24 @@
 
 ## 🧩 系统架构 | System Architecture
 
+## 🧩 系统架构 | System Architecture
+
+```text
++-----------------------------------------------------------+
+|                   Application Layer                       |
+|  ├── MotorController_Init()   # 三段式速度规划初始化       |
+|  ├── MotorController_Update() # 实时增量计算与调度         |
+|  └── ecat_loop()              # EtherCAT 同步主循环         |
++-----------------------------------------------------------+
+|                Protocol Stack Layer (SOEM)                |
+|  ├── ecat_init()              # 主站初始化与从站识别        |
+|  ├── Zeroer_Nsetup()          # 对象字典与PDO映射          |
+|  ├── Zeroer_CSPInit()         # 从站CSP模式初始化           |
+|  └── ec_dcsync0()             # 分布式时钟同步（68μs）     |
++-----------------------------------------------------------+
+|                Hardware Driver Layer (HAL)                |
+|  ├── MX_ETH_Init()           # MAC + DMA 初始化             |
+|  ├── LAN8720_Init()          # PHY 自动协商与复位          |
+|  ├── MX_TIM4_Init()          # 1kHz周期定时器驱动任务       |
+|  └── FreeRTOS (可选)         # 实时任务管理                 |
++-----------------------------------------------------------+

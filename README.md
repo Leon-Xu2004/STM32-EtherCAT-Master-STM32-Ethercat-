@@ -1,7 +1,3 @@
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 # ⚙️ 基于 STM32 的 EtherCAT 主站运动控制系统
 [![Platform](https://img.shields.io/badge/Platform-STM32H743-blue?logo=stmicroelectronics)]()
 [![EtherCAT](https://img.shields.io/badge/Protocol-EtherCAT-red?logo=siemens)]()
@@ -67,9 +63,9 @@ $$
 $$
 S(t)=
 \begin{cases}
-\frac{1}{2}a_{max}t^2 & 0<t<t_a\\
-S_{acc}+v_{max}(t-t_a) & t_a<t<t_a+t_m\\
-S_{total}-\frac{1}{2}a_{max}(t_f-t)^2 & t_a+t_m<t<t_f
+\frac{1}{2}a_{max}t^2, & 0<t<t_a \\\\
+S_{acc}+v_{max}(t-t_a), & t_a<t<t_a+t_m \\\\
+S_{total}-\frac{1}{2}a_{max}(t_f-t)^2, & t_a+t_m<t<t_f
 \end{cases}
 $$
 

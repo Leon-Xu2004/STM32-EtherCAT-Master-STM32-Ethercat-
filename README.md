@@ -58,7 +58,6 @@ $$
 t_a = \frac{v_{max}}{a_{max}}, \quad
 S_{acc} = \frac{1}{2}a_{max}t_a^2, \quad
 S_{flat} = S_{total} - 2S_{acc}
-\end{cases}
 $$
 
 $$

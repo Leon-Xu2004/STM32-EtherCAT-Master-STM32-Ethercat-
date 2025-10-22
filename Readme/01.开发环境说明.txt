@@ -1,0 +1,153 @@
+/*
+ *********************************************************************************************************
+ *
+ *                           硬石YS-H7开发板开发环境说明
+ *
+ * 
+ *********************************************************************************************************
+ */
+
+【1】CPU内部资源
+	CPU型号        : STM32H743IIT6 / LQFP-176 / ARM 32-bit Cortex-M7
+	主频           : 400MHz
+	内部Flash容量  : 2MB
+	内部SRAM容量   : 864KB SRAM + 192KB TCM RAM + 4KB BKSRAM  = 1MB  RAM
+  Quad-SPI       : 1个 最高133MHz
+	定时器         : 22个
+                   1个高分辨率定时器（最高2.5ns分辨率）
+                   2个32bit定时器
+                   2个16bit高级控制定时器
+                   10个16bit通用定时器
+                   5个通用低功耗定时器
+                   2个看门狗（窗口看门狗和独立看门狗）
+                   1个系统滴答定时器
+                   RTC时钟，自带硬件万年历。                   
+	UART           : 8个：4个USART+4个UART
+	SPI            : 6个 (4个可复用为I2S)
+	I2C FM+        : 4个
+  SAIs           : 4个
+  SPDIFRX        ：1个
+  SWPMI          ：1个
+  MDIO           ：1个
+  SDIO           ：2个
+  CAN            ：2个（CAN FD，TT-CAN）
+  ETH            : 10/100M以太网  
+	USB            : USB2.0全速（集成内部PHY） 从设备/主设备/OTG功能
+                   USB2.0高速/全速 从设备/主设备/OTG功能  
+  DCMI           ：摄像头接口  
+	ADC            : 3个独立的16位ADC
+	DAC            : 2路独立12位DAC
+  比较器         ：2个超低功耗
+  运放           ：2个
+  DFSDM          ：1个 Σ-δ滤波器
+	CAN            : 2个 CAN 2.0B
+	SDIO           : 1个
+  LCD-TFT        ：LCD驱动，硬件JPEG  
+  GPIO           : 140个
+
+  
+【2】FSMC存储器地址分配
+  CPU内部 FLASH         【0x0800 0000 - 0x081F FFFF】,容量2M(0x200000)字节
+	CPU内部 SRAM1         【0x2000 0000 - 0x2001 FFFF】,容量128K(0x20000)字节
+  
+	TFT LCD地址    【0x6C00 0000,  0x6C00 0002】, 仅占用1个端口地址
+
+【3】开发工具
+    【仿真器】 --- 非标配，单独选购
+	虽然STM32支持串口ISP下载程序，但是不支持在线调试。使用串口下载，开发效率极低，因此强烈推荐购买一个仿真
+	器，提高开发效率。
+	- ST-LINK V2 仿真器: ST公司开发的仿真器，可以下载程序和调试跟踪程序。支持STM8和STM32。
+	- J-LINK V8,V9仿真器 : Segger公司开发的仿真器，可以下载程序和调试跟踪程序。支持所有ARM系列。
+  - CMSIS-DAP仿真器：ARM开源仿真器，可以下载程序和调试跟踪程序。支持所有ARM-M系列。
+    【Mini USB线】--- 开发板配送
+	- 核心板预留一个Mini USB接口，使用CH330N芯片通过跳线帽选择接在stm32芯片USART3接口上，可用于大部分
+    的程序打印调试信息。
+
+    【开发软件】
+	- 编译环境 KEIL 的 MDK uVision5.25.2
+             IAR  的 ARM工具 v8.30.1  
+
+【5】编译和调试方法
+
+	【Keil MDK】V5.25.2
+		- 执行菜单 Project -> Open project                                打开 \MDK-ARM\YS-H7Core.uvprojx （这是工程文件）
+ 		- 执行菜单 Project -> Rebuild all target files(F7)                重新编译所有的文件:
+ 		- 执行菜单 Flash -> Download (F8)                                 下载程序到开发板运行
+	【IAR】V8.30.1
+		- 执行菜单 File -> Open -> Workspace                              打开 \EWARM\Project.eww （这是工程工作平台文件）
+ 		- 执行菜单 Project -> Rebuild all(F7)                                 重新编译所有的文件:
+ 		- 执行菜单 Project -> Download and Debug(Ctrl+D)                  装载程序并启动调试
+【6】例程文件夹说明
+├─Bsp       :   存放由硬石嵌入式开发团队编写的板级支持包文件。
+│  ├─Src    :   板级支持包源码文件
+│  └─Inc    :   板级支持包头文件
+│
+├─Drivers   :   存放第3方提供的库或其源代码，这些代码一般是成熟的并经过验证的代码。
+│  ├─CMSIS  :   CMSIS是ARM公司与多家不同的芯片和软件供应商一起紧密合作定义的，提供了内核与外设、实时操作系统和中间设备之间的通用接口。
+│  └─STM32H7xx_HAL_Driver : STM32H7xx系列MCU的硬件抽象层(HAL)库源代码
+│
+├─EWARM     :  IAR编译器工程文件夹
+│
+├─Inc       :  这里存放用户任务程序相关头文件
+│
+├─MDK-ARM   :  Keil编译器工程文件夹
+│
+├─Readme    :  工程相关说明
+│
+└─Src       :  这里存放用户任务程序C语言源文件
+
+
+【7】工程中源代码分组说明
+IAR编译环境
+└─YS-H7Core                       : 工程名称
+   ├─Application                  : 应用程序
+   │    ├─EWARM                   : 启动文件(汇编源程序)starup_stm32h742xx.s
+   │    └─User                    : 存放 main.c 以及用户任务程序
+   │
+   ├─Bsp                          : 板级支持包，存放模块底层驱动函数 
+   │
+   ├─Drivers                      : 底层驱动程序
+   │    ├─CMSIS                   : 仅存放CMSIS接口文件 system_stm32h7xx.c)
+   │    └─STM32H7xx_HAL_Driver    : 存放STM32H7xx系列MCU的HAL库源代码
+   │
+   ├─Readme                       : 工程说明文档，仅限txt文件
+   └─Output                       : 工程编译输出文件
+   
+Keil编译环境
+└─YS-H7Core                       : Target名称
+   ├─Application/MDK-ARM          : 启动文件(汇编源程序)starup_stm32h742xx.s
+   ├─Application/User             : 存放 main.c 以及用户任务程序
+   ├─Drivers/STM32H7xx_HAL_Driver : 存放STM32H7xx系列MCU的HAL库源代码
+   ├─Drivers/CMSIS                : 仅存放CMSISI接口文件 system_stm32h7xx.c   
+   ├─Bsp                          : 板级支持包，存放模块底层驱动函数  
+   └─Readme                       : 工程说明文档，仅限txt文件
+
+【8】公共源代码文件说明
+	- main.c              : 用户主程序，存放main()函数的文件
+	- stm32h7xx_it.c      : 集中存放中断服务程序
+	- stm32h7xx_hal_msp.c : HAL库的板载支持包初始化函数文件
+	- stm32h7xx_assert.c  : 断言处理函数	
+
+【9】C编译器中的预定义宏 （在工程设置中更改）
+	USE_HAL_DRIVER        - 增加这个符号表示使用ST公司的HAL库外设驱动
+	STM32H743xx           - 增加这个符号表示使用STM32H743xx系列芯片
+
+【10】调整堆和栈的容量
+	对于IAR EWARM, 直接在工程设置中进行修改即可
+		- 菜单 project -> options -> 选择Linker -> Config页 -> 点Edit按钮 -> 切换到Stack/Heap Size
+		比如：
+			CSTACK = 0x1000
+			HEAP   = 0x400		
+		
+	对于KEIL MDK, 设置堆和栈的大小是通过修改启动文件start_stm32f407xx.s 文件实现的，比如：
+		Stack_Size      EQU     0x00001000
+		Heap_Size       EQU     0x00000400
+
+【11】输出目标文件
+    对于IAR EWARM:
+	\EWARM\YS-H7Multi\Exe\YS-H7Multi.hex  - 采用IAR EWARM编译好的文件	
+    \EWARM\YS-H7Multi\List\YS-H7Multi.map  - 这是编译链接文件，文本格式，可以查看每个函数、变量的地址和空间分配情况。
+	
+    对于KEIL MDK:
+	\MDK-ARM\YS-H7Multi\YS-H7Multi.hex  - 采用KEIL MDK编译好的文件，定位在CPU 内部Flash	
+	\MDK-ARM\YS-H7Multi\YS-H7Multi.map  - 这是编译链接文件，文本格式，可以查看每个函数、变量的地址和空间分配情况。

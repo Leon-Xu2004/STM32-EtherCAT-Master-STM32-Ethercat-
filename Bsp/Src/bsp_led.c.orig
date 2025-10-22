@@ -1,0 +1,147 @@
+/**
+  ******************************************************************************
+  * 文件名程: bsp_led.c 
+  * 作    者: 硬石嵌入式开发团队
+  * 版    本: V1.0
+  * 编写日期: 2018-09-01
+  * 功    能: LED驱动程序
+  ******************************************************************************
+  * 说明：
+  * 本例程配套硬石stm32开发板YS-H7Multi使用。
+  * 
+  * 淘宝：
+  * 论坛：http://www.ing10bbs.com
+  * 版权归硬石嵌入式开发团队所有，请勿商用。
+  ******************************************************************************
+  */
+
+/* 包含头文件 ----------------------------------------------------------------*/
+#include "bsp_led.h"
+
+/* 私有类型定义 --------------------------------------------------------------*/
+
+/* 私有宏定义 ----------------------------------------------------------------*/
+
+/* 私有变量 ------------------------------------------------------------------*/
+
+/* 扩展变量 ------------------------------------------------------------------*/
+
+/* 私有函数原形 --------------------------------------------------------------*/
+
+/* 函数体 --------------------------------------------------------------------*/
+
+/**
+  * 函数功能: 板载LED灯IO引脚初始化.
+  * 输入参数: 无
+  * 返 回 值: 无
+  * 说    明：使用宏定义方法代替具体引脚号，方便程序移植，只要简单修改bsp_led.h
+  *           文件相关宏定义就可以方便修改引脚。
+  */
+void LED_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct={0};
+
+  /* 使能LED引脚对应的GPIO端口时钟 */
+  LED1_RCC_GPIO_CLK_ENABLE();
+  LED2_RCC_GPIO_CLK_ENABLE();
+  LED3_RCC_GPIO_CLK_ENABLE();
+
+  /* 配置LED1引脚默认输出电压 */
+  HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+
+  /*配置GPIO引脚 */
+  GPIO_InitStruct.Pin = LED1_PIN;             // I/O编号
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; // 工作模式，推挽输出
+  GPIO_InitStruct.Pull = GPIO_NOPULL;         // 不使用上拉/下拉输出
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;// I/O操作速度 低
+  /* 根据上面的配置初始化LED的引脚 */
+  HAL_GPIO_Init(LED1_GPIO_PORT, &GPIO_InitStruct);
+  
+  /*配置GPIO引脚 */
+  GPIO_InitStruct.Pin = LED2_PIN;             // I/O编号
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; // 工作模式，推挽输出
+  GPIO_InitStruct.Pull = GPIO_NOPULL;         // 不使用上拉/下拉输出
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;// I/O操作速度 低
+  /* 根据上面的配置初始化LED的引脚 */
+  HAL_GPIO_Init(LED2_GPIO_PORT, &GPIO_InitStruct);
+
+  /*配置GPIO引脚 */
+  GPIO_InitStruct.Pin = LED3_PIN;             // I/O编号
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP; // 工作模式，推挽输出
+  GPIO_InitStruct.Pull = GPIO_NOPULL;         // 不使用上拉/下拉输出
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;// I/O操作速度 低
+  /* 根据上面的配置初始化LED的引脚 */
+  HAL_GPIO_Init(LED3_GPIO_PORT, &GPIO_InitStruct);
+}
+
+
+/**
+  * 函数功能: 设置板载LED灯的状态
+  * 输入参数: LEDx:其中x可设置为(1,2,3)用来选择对应的LED灯
+  * 输入参数：state:设置LED灯的输出状态。
+  *             可选值：LED_OFF：LED灯灭；
+  *                     LED_ON： LED灯亮。
+  *                     LED_TOGGLE：反转LED
+  * 返 回 值: 无
+  * 说    明：该函数使用类似HAL库函数的编程方法，方便理解HAL库函数编程思想。
+  */
+void LEDx_StateSet(uint8_t LEDx,LEDState_TypeDef state)
+{
+  uint8_t led ;
+  
+  /* 检查输入参数是否合法 */
+  assert_param(IS_LED_TYPEDEF(LEDx));
+  assert_param(IS_LED_STATE(state));
+  
+  /* 判断设置的LED灯状态*/
+  switch(state)
+  {
+    /* 点亮LED */
+    case LED_ON:
+      led = LEDx & LED1;
+      if(led == LED1)
+        LED1_ON();
+      
+      led = LEDx & LED2;
+      if(led == LED2)
+        LED2_ON();
+      
+      led = LEDx & LED3;
+      if(led == LED3)
+        LED3_OFF();
+      break;
+      
+    /* 熄灭LED */
+    case LED_OFF:
+      led = LEDx & LED1;
+      if(led == LED1)            
+        LED1_OFF();
+      
+      led = LEDx & LED2;
+      if(LEDx & LED2)
+        LED2_OFF();
+      
+      led = LEDx & LED2;
+      if(LEDx & LED3)
+        LED3_OFF();
+      break;
+    
+    /* 翻转LED */      
+    case LED_TOGGLE:
+      led = LEDx & LED1;
+      if(led == LED1)            
+        LED1_TOGGLE();/* 设置引脚输出反转 */ 
+      
+      led = LEDx & LED2;
+      if(LEDx & LED2)
+        LED2_TOGGLE();
+      
+      led = LEDx & LED2;
+      if(LEDx & LED3)
+        LED3_TOGGLE();
+      break;
+  }
+}
+/********** (C) COPYRIGHT 2019-2030 硬石嵌入式开发团队 *******END OF FILE******/
